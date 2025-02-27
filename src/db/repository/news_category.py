@@ -1,9 +1,10 @@
 from typing import Sequence
 
+from sqlalchemy import delete, insert, select
+
 from db.models import NewsCategory
 from db.repository.base import BaseDatabaseRepository
 from schemas.news_category import UpdateNewsCategorySchema
-from sqlalchemy import delete, insert, select
 
 
 class NewsCategoryRepository(BaseDatabaseRepository):
@@ -20,7 +21,7 @@ class NewsCategoryRepository(BaseDatabaseRepository):
         return result.scalar_one_or_none()
 
     async def create_category(self, news_category: UpdateNewsCategorySchema) -> None:
-        query = insert(NewsCategory).values(**news_category.dict())
+        query = insert(NewsCategory).values(**news_category.model_dump())
         await self._session.execute(query)
         await self._session.commit()
 

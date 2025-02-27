@@ -7,3 +7,16 @@ news_category_not_found_exceptions = HTTPException(
 news_category_already_exists_exceptions = HTTPException(
     status_code=status.HTTP_409_CONFLICT, detail="News Category already exists"
 )
+
+user_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+user_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
+
+news_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="News not found")
+
+news_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="News already exists")
+
+incorrect_password_exceptions = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Invalid password",
+)

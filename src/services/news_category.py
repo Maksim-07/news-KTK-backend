@@ -1,11 +1,12 @@
 from typing import Sequence
 
+from fastapi import Depends
+
 from core.exceptions import (
     news_category_already_exists_exceptions,
     news_category_not_found_exceptions,
 )
 from db.repository.news_category import NewsCategoryRepository
-from fastapi import Depends
 from schemas.news_category import (
     GetNewsCategorySchema,
     UpdateNewsCategorySchema,

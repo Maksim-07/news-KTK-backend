@@ -1,8 +1,9 @@
-from db.models.base import BaseModel
-from db.models.mixins import CreatedAtMixin, IDMixin, UpdatedAtMixin
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.orm import Mapped, mapped_column
+
+from db.models.base import BaseModel
+from db.models.mixins import CreatedAtMixin, IDMixin, UpdatedAtMixin
 
 
 class News(BaseModel, IDMixin, CreatedAtMixin, UpdatedAtMixin):

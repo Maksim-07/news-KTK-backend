@@ -1,7 +1,6 @@
 import functools
 import typing
 
-from core.config import settings
 from sqlalchemy import URL
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -9,6 +8,8 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+
+from core.config import settings
 
 
 @functools.lru_cache

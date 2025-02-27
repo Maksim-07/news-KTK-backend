@@ -9,4 +9,11 @@ class UserSchema(BaseSchema):
     last_name: str
 
 
+class CurrentUserSchema(UserSchema):
+    id: int
+
+
 class GetUserSchema(UserSchema): ...
+
+
+class UpdateUserSchema(UserSchema): ...

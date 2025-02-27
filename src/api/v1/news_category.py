@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from fastapi import APIRouter, Depends, status
+
 from schemas.news_category import (
     GetNewsCategorySchema,
     UpdateNewsCategorySchema,
