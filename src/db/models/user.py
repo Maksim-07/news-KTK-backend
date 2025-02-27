@@ -1,8 +1,7 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
-
 from db.models.base import BaseModel
 from db.models.mixins import CreatedAtMixin, IDMixin
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class User(BaseModel, IDMixin, CreatedAtMixin):

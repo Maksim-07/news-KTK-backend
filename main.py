@@ -2,15 +2,15 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.router import v1_router
+from api.router import api_router
 from core.config import settings
 
 app = FastAPI(
-    title="news-KTK",
+    title=settings().PROJECT_NAME,
     openapi_url="/api/openapi.json",
     docs_url="/api/swagger",
 )
-app.include_router(v1_router)
+app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,

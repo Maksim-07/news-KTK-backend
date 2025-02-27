@@ -1,18 +1,25 @@
-from fastapi import Depends
+from typing import Sequence
 
-from core.exceptions import news_category_already_exists_exceptions, news_category_not_found_exceptions
+from core.exceptions import (
+    news_category_already_exists_exceptions,
+    news_category_not_found_exceptions,
+)
 from db.repository.news_category import NewsCategoryRepository
-from schemas.news_category import GetNewsCategorySchema, UpdateNewsCategorySchema
+from fastapi import Depends
+from schemas.news_category import (
+    GetNewsCategorySchema,
+    UpdateNewsCategorySchema,
+)
 
 
 class NewsCategoryService:
     def __init__(self, news_category_repo: NewsCategoryRepository = Depends()):
         self._news_category_repo = news_category_repo
 
-    async def get_news_categories(self):
+    async def get_news_categories(self) -> Sequence[GetNewsCategorySchema]:
         categories = await self._news_category_repo.get_categories()
 
-        return [GetNewsCategorySchema.from_orm(category) for category in categories]
+        return [GetNewsCategorySchema.model_validate(category) for category in categories]
 
     async def create_news_category(self, news_category: UpdateNewsCategorySchema) -> None:
         current_news_category = await self._news_category_repo.get_category_by_name(name=news_category.name)

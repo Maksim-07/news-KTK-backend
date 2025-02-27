@@ -1,7 +1,7 @@
 import functools
-import os
+from pathlib import Path
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -10,8 +10,11 @@ class Settings(BaseSettings):
     и установка значений по умолчанию.
     """
 
-    root_dir: str = os.path.abspath(__file__ + 3 * "/..")
-    src_dir: str = os.path.join(root_dir, "src")
+    root_dir: Path = Path(__file__).resolve().parent.parent.parent
+    src_dir: Path = root_dir.joinpath("src")
+    env_file: Path = src_dir.joinpath(".env")
+
+    PROJECT_NAME: str = "news-ktk"
 
     SERVER_HOST: str = "0.0.0.0"
     SERVER_PORT: int = 8000
@@ -38,9 +41,7 @@ class Settings(BaseSettings):
             f"{postgres_host}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(env_file=env_file if env_file else None, env_file_encoding="utf-8")
 
 
 @functools.lru_cache()

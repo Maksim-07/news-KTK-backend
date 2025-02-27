@@ -3,7 +3,8 @@ name = "news-KTK"
 version = "0.1.0"
 description = ""
 authors = ["Maksim-07 <kosmakovmaksim@yandex.ru>"]
-readme = "README.md"
+readme = "../README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"

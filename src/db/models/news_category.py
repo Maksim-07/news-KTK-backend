@@ -1,8 +1,7 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
-
 from db.models.base import BaseModel
 from db.models.mixins import IDMixin
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class NewsCategory(BaseModel, IDMixin):

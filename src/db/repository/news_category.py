@@ -1,10 +1,9 @@
 from typing import Sequence
 
-from sqlalchemy import delete, insert, select
-
 from db.models import NewsCategory
 from db.repository.base import BaseDatabaseRepository
 from schemas.news_category import UpdateNewsCategorySchema
+from sqlalchemy import delete, insert, select
 
 
 class NewsCategoryRepository(BaseDatabaseRepository):

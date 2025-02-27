@@ -1,8 +1,10 @@
 from typing import Sequence
 
 from fastapi import APIRouter, Depends, status
-
-from schemas.news_category import GetNewsCategorySchema, UpdateNewsCategorySchema
+from schemas.news_category import (
+    GetNewsCategorySchema,
+    UpdateNewsCategorySchema,
+)
 from services.news_category import NewsCategoryService
 
 router = APIRouter(prefix="/news-category", tags=["News Category"])
