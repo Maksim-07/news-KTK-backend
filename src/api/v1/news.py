@@ -9,8 +9,8 @@ router = APIRouter(prefix="/news", tags=["News"])
 
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=Sequence[GetNewsSchema])
-async def get_news(news_service: NewsService = Depends()):
-    return await news_service.get_news()
+async def get_news(category_id: int | None = None, news_service: NewsService = Depends()):
+    return await news_service.get_news(category_id=category_id)
 
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=None)

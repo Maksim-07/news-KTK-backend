@@ -7,16 +7,18 @@ from core.exceptions import (
     news_not_found_exceptions,
 )
 from db.repository.news import NewsRepository
+from db.repository.news_category import NewsCategoryRepository
 from schemas.news import GetNewsSchema, UpdateNewsSchema
 from schemas.news_category import UpdateNewsCategorySchema
 
 
 class NewsService:
-    def __init__(self, news_repo: NewsRepository = Depends()):
+    def __init__(self, news_repo: NewsRepository = Depends(), news_category_repo: NewsCategoryRepository = Depends()):
         self._news_repo = news_repo
+        self._news_category_repo = news_category_repo
 
-    async def get_news(self) -> Sequence[GetNewsSchema]:
-        news = await self._news_repo.get_news()
+    async def get_news(self, category_id: int | None) -> Sequence[GetNewsSchema]:
+        news = await self._news_repo.get_news(category_id=category_id)
 
         return [GetNewsSchema.model_validate(news_one) for news_one in news]
 

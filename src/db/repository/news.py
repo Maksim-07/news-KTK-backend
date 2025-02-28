@@ -1,6 +1,6 @@
 from typing import Any, Sequence
 
-from sqlalchemy import delete, insert, join, select
+from sqlalchemy import delete, insert, join, select, true
 
 from db.models import News, User
 from db.repository.base import BaseDatabaseRepository
@@ -8,8 +8,7 @@ from schemas.news import GetNewsSchema, UpdateNewsSchema
 
 
 class NewsRepository(BaseDatabaseRepository):
-    # TODO Добавить по категории
-    async def get_news(self) -> Sequence[Any]:
+    async def get_news(self, category_id: int | None) -> Sequence[Any]:
         query = (
             select(
                 News.id,
@@ -23,6 +22,7 @@ class NewsRepository(BaseDatabaseRepository):
             )
             .select_from(News)
             .join(User, News.author_id == User.id)
+            .filter(News.category_id == category_id if category_id else true())
         )
         result = await self._session.execute(query)
 
