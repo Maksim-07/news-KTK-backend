@@ -18,6 +18,6 @@ async def create_news(news: UpdateNewsSchema, news_service: NewsService = Depend
     return await news_service.create_news(news=news)
 
 
-@router.delete("/{title}", status_code=status.HTTP_200_OK, response_model=None)
-async def delete_news_by_title(title: str, news_service: NewsService = Depends()):
-    return await news_service.delete_news_by_title(title=title)
+@router.delete("/{news_id}", status_code=status.HTTP_200_OK, response_model=None)
+async def delete_news_by_id(news_id: int, news_service: NewsService = Depends()):
+    return await news_service.delete_news_by_id(news_id=news_id)

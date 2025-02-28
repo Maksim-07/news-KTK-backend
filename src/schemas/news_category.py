@@ -6,7 +6,8 @@ class NewsCategorySchema(BaseSchema):
     description: str
 
 
-class GetNewsCategorySchema(NewsCategorySchema): ...
+class GetNewsCategorySchema(NewsCategorySchema):
+    id: int
 
 
 class UpdateNewsCategorySchema(NewsCategorySchema): ...

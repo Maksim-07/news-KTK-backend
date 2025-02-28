@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pydantic.json_schema import SkipJsonSchema
+
 from schemas.base import BaseSchema
 
 
@@ -12,7 +14,8 @@ class NewsSchema(BaseSchema):
 
 
 class GetNewsSchema(NewsSchema):
-    author_name: str
+    id: int
+    username: str
     created_at: datetime
 
 

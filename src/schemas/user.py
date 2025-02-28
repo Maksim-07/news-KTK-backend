@@ -1,3 +1,5 @@
+from pydantic.json_schema import SkipJsonSchema
+
 from schemas.base import BaseSchema
 
 
@@ -13,7 +15,8 @@ class CurrentUserSchema(UserSchema):
     id: int
 
 
-class GetUserSchema(UserSchema): ...
+class GetUserSchema(UserSchema):
+    id: int
 
 
 class UpdateUserSchema(UserSchema): ...

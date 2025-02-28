@@ -1,19 +1,38 @@
-from typing import Sequence
+from typing import Any, Sequence
 
-from sqlalchemy import delete, insert, select
+from sqlalchemy import delete, insert, join, select
 
-from db.models import News
+from db.models import News, User
 from db.repository.base import BaseDatabaseRepository
-from schemas.news import UpdateNewsSchema
+from schemas.news import GetNewsSchema, UpdateNewsSchema
 
 
 class NewsRepository(BaseDatabaseRepository):
     # TODO Добавить по категории
-    async def get_news(self) -> Sequence[News]:
-        query = select(News)
+    async def get_news(self) -> Sequence[Any]:
+        query = (
+            select(
+                News.id,
+                News.image,
+                News.title,
+                News.content,
+                News.category_id,
+                News.author_id,
+                News.created_at,
+                User.username,
+            )
+            .select_from(News)
+            .join(User, News.author_id == User.id)
+        )
         result = await self._session.execute(query)
 
-        return result.scalars().all()
+        return result.all()
+
+    async def get_news_by_id(self, news_id: int) -> News | None:
+        query = select(News).where(News.id == news_id)
+        result = await self._session.execute(query)
+
+        return result.scalar_one_or_none()
 
     async def get_news_by_title(self, title: str) -> News | None:
         query = select(News).where(News.title == title)

@@ -23,6 +23,6 @@ async def create_news_category(
     return await news_category_service.create_news_category(news_category=news_category)
 
 
-@router.delete("/{name}", status_code=status.HTTP_200_OK, response_model=None)
-async def delete_news_category(name: str, news_category_service: NewsCategoryService = Depends()):
-    return await news_category_service.delete_news_category_by_name(name=name)
+@router.delete("/{category_id}", status_code=status.HTTP_200_OK, response_model=None)
+async def delete_news_category(category_id: int, news_category_service: NewsCategoryService = Depends()):
+    return await news_category_service.delete_news_category_by_id(category_id=category_id)

@@ -23,7 +23,6 @@ class AuthService:
 
     async def login_user(self, user: OAuth2PasswordRequestForm):
         current_user = await self._user_repo.get_user_by_username(username=user.username)
-        print(current_user)
 
         if not current_user:
             raise user_not_found_exceptions

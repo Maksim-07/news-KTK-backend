@@ -28,8 +28,8 @@ class NewsService:
 
         return await self._news_repo.create_news(news=news)
 
-    async def delete_news_by_title(self, title: str):
-        current_news = await self._news_repo.get_news_by_title(title=title)
+    async def delete_news_by_id(self, news_id: int):
+        current_news = await self._news_repo.get_news_by_id(news_id=news_id)
 
         if current_news is None:
             raise news_not_found_exceptions

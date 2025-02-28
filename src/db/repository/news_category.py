@@ -14,8 +14,14 @@ class NewsCategoryRepository(BaseDatabaseRepository):
 
         return result.scalars().all()
 
-    async def get_category_by_name(self, name: str) -> NewsCategory | None:
-        query = select(NewsCategory).where(NewsCategory.name == name)
+    async def get_category_by_id(self, category_id: int) -> NewsCategory | None:
+        query = select(NewsCategory).where(NewsCategory.id == category_id)
+        result = await self._session.execute(query)
+
+        return result.scalar_one_or_none()
+
+    async def get_category_by_name(self, category_name: str) -> NewsCategory | None:
+        query = select(NewsCategory).where(NewsCategory.name == category_name)
         result = await self._session.execute(query)
 
         return result.scalar_one_or_none()

@@ -19,19 +19,20 @@ class NewsCategoryService:
 
     async def get_news_categories(self) -> Sequence[GetNewsCategorySchema]:
         categories = await self._news_category_repo.get_categories()
+        print(categories[0])
 
         return [GetNewsCategorySchema.model_validate(category) for category in categories]
 
     async def create_news_category(self, news_category: UpdateNewsCategorySchema) -> None:
-        current_news_category = await self._news_category_repo.get_category_by_name(name=news_category.name)
+        current_news_category = await self._news_category_repo.get_category_by_name(category_name=news_category.name)
 
         if current_news_category:
             raise news_category_already_exists_exceptions
 
         return await self._news_category_repo.create_category(news_category=news_category)
 
-    async def delete_news_category_by_name(self, name: str):
-        news_category = await self._news_category_repo.get_category_by_name(name=name)
+    async def delete_news_category_by_id(self, category_id: int):
+        news_category = await self._news_category_repo.get_category_by_id(category_id=category_id)
 
         if news_category is None:
             raise news_category_not_found_exceptions
