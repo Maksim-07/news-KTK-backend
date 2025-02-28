@@ -28,11 +28,25 @@ class NewsRepository(BaseDatabaseRepository):
 
         return result.all()
 
-    async def get_news_by_id(self, news_id: int) -> News | None:
-        query = select(News).where(News.id == news_id)
+    async def get_news_by_id(self, news_id: int) -> Any | None:
+        query = (
+            select(
+                News.id,
+                News.image,
+                News.title,
+                News.content,
+                News.category_id,
+                News.author_id,
+                News.created_at,
+                User.username,
+            )
+            .select_from(News)
+            .join(User, News.author_id == User.id)
+            .filter(News.id == news_id)
+        )
         result = await self._session.execute(query)
 
-        return result.scalar_one_or_none()
+        return result.one_or_none()
 
     async def get_news_by_title(self, title: str) -> News | None:
         query = select(News).where(News.title == title)
