@@ -20,3 +20,13 @@ incorrect_password_exceptions = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Invalid password",
 )
+
+credentials_exceptions = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Could not validate credentials",
+)
+
+invalid_token_exceptions = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Invalid token",
+)
