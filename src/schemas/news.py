@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic.json_schema import SkipJsonSchema
+from pydantic import Base64Bytes
 
 from schemas.base import BaseSchema
 
@@ -8,7 +8,7 @@ from schemas.base import BaseSchema
 class NewsSchema(BaseSchema):
     title: str
     content: str
-    image: bytes | None = None
+    image: Base64Bytes | None = None
     author_id: int
     category_id: int
 
