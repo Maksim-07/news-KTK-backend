@@ -1,6 +1,6 @@
 FROM python:3.12-alpine
 
-WORKDIR /usr/news-KTK/src
+WORKDIR /usr/news-ktk/src
 
 RUN pip install poetry==2.0.1 --no-cache-dir --root-user-action=ignore
 

@@ -19,7 +19,6 @@ class NewsCategoryService:
 
     async def get_news_categories(self) -> Sequence[GetNewsCategorySchema]:
         categories = await self._news_category_repo.get_categories()
-        print(categories[0])
 
         return [GetNewsCategorySchema.model_validate(category) for category in categories]
 
