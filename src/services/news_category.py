@@ -31,6 +31,14 @@ class NewsCategoryService:
 
         return await self._news_category_repo.create_category(news_category=news_category)
 
+    async def update_news_category(self, category_id: int, news_category: UpdateNewsCategorySchema) -> None:
+        current_news_category = await self._news_category_repo.get_category_by_id(category_id=category_id)
+
+        if current_news_category is None:
+            raise news_category_not_found_exceptions
+
+        return await self._news_category_repo.update_category(category_id=category_id, news_category=news_category)
+
     async def delete_news_category_by_id(self, category_id: int):
         news_category = await self._news_category_repo.get_category_by_id(category_id=category_id)
 

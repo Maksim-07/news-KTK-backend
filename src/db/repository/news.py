@@ -1,10 +1,10 @@
 from typing import Any, Sequence
 
-from sqlalchemy import delete, insert, join, select, true
+from sqlalchemy import delete, insert, select, true, update
 
 from db.models import News, User
 from db.repository.base import BaseDatabaseRepository
-from schemas.news import GetNewsSchema, UpdateNewsSchema
+from schemas.news import UpdateNewsSchema
 
 
 class NewsRepository(BaseDatabaseRepository):
@@ -56,6 +56,11 @@ class NewsRepository(BaseDatabaseRepository):
 
     async def create_news(self, news: UpdateNewsSchema) -> None:
         query = insert(News).values(**news.model_dump())
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def update_news(self, news_id: int, news: UpdateNewsSchema) -> None:
+        query = update(News).where(News.id == news_id).values(**news.model_dump())
         await self._session.execute(query)
         await self._session.commit()
 

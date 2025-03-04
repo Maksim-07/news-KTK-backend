@@ -30,3 +30,8 @@ invalid_token_exceptions = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Invalid token",
 )
+
+token_not_found_exceptions = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="Token not found",
+)

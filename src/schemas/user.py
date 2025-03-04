@@ -1,11 +1,8 @@
-from pydantic.json_schema import SkipJsonSchema
-
 from schemas.base import BaseSchema
 
 
 class UserSchema(BaseSchema):
     username: str
-    password: str
     email: str
     first_name: str
     last_name: str
@@ -19,4 +16,5 @@ class GetUserSchema(UserSchema):
     id: int
 
 
-class UpdateUserSchema(UserSchema): ...
+class UpdateUserSchema(UserSchema):
+    password: str

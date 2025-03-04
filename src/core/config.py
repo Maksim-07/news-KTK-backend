@@ -23,6 +23,8 @@ class Settings(BaseSettings):
 
     CORS_ALLOW_ORIGIN_LIST: str = "http://127.0.0.1:8000"
 
+    USE_KEYCLOAK: bool = True
+
     POSTGRES_HOST: str = "news-KTK"
     POSTGRES_PORT: int = 5632
     POSTGRES_USER: str = "news-KTK"

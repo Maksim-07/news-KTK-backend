@@ -27,6 +27,14 @@ class UserService:
 
         return [GetUserSchema.model_validate(user) for user in users]
 
+    async def get_user_by_id(self, user_id: int) -> GetUserSchema | None:
+        user = await self._user_repo.get_user_by_id(user_id=user_id)
+
+        if not user:
+            raise user_not_found_exceptions
+
+        return GetUserSchema.model_validate(user)
+
     async def get_current_user(self, token: str) -> CurrentUserSchema:
         try:
             payload = jwt.decode(token, settings().SECRET_KEY, algorithms=[settings().ALGORITHM])
@@ -55,13 +63,13 @@ class UserService:
 
         return await self._user_repo.create_user(user=user)
 
-    async def delete_user_by_username(self, username: str) -> None:
-        current_user = await self._user_repo.get_user_by_username(username=username)
+    async def delete_user_by_id(self, user_id: int) -> None:
+        current_user = await self._user_repo.get_user_by_id(user_id=user_id)
 
         if current_user is None:
             raise user_not_found_exceptions
 
-        return await self._user_repo.delete_user_by_id(user_id=current_user.id)
+        return await self._user_repo.delete_user_by_id(user_id=user_id)
 
     def __get_password_hash(self, password: str) -> str:
         return self.__ctx.hash(password)

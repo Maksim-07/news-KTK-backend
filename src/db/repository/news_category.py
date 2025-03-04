@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from sqlalchemy import delete, insert, select
+from sqlalchemy import delete, insert, select, update
 
 from db.models import NewsCategory
 from db.repository.base import BaseDatabaseRepository
@@ -28,6 +28,11 @@ class NewsCategoryRepository(BaseDatabaseRepository):
 
     async def create_category(self, news_category: UpdateNewsCategorySchema) -> None:
         query = insert(NewsCategory).values(**news_category.model_dump())
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def update_category(self, category_id: int, news_category: UpdateNewsCategorySchema) -> None:
+        query = update(NewsCategory).where(NewsCategory.id == category_id).values(**news_category.model_dump())
         await self._session.execute(query)
         await self._session.commit()
 

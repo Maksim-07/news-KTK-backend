@@ -1,8 +1,8 @@
-"""Added tables for news
+"""Init tables
 
-Revision ID: 384a2d961434
+Revision ID: 99408c53f9fc
 Revises:
-Create Date: 2025-02-16 15:06:57.379139
+Create Date: 2025-03-04 09:49:40.552750
 
 """
 
@@ -10,9 +10,10 @@ from typing import Sequence, Union
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "384a2d961434"
+revision: str = "99408c53f9fc"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -47,13 +48,16 @@ def upgrade() -> None:
         "news",
         sa.Column("title", sa.String(), nullable=False),
         sa.Column("content", sa.String(), nullable=False),
+        sa.Column("image", postgresql.BYTEA(), nullable=True),
         sa.Column("author_id", sa.Integer(), nullable=False),
         sa.Column("category_id", sa.Integer(), nullable=False),
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=True),
-        sa.ForeignKeyConstraint(["author_id"], ["users.id"], name=op.f("news_author_id_fkey")),
-        sa.ForeignKeyConstraint(["category_id"], ["news_category.id"], name=op.f("news_category_id_fkey")),
+        sa.ForeignKeyConstraint(["author_id"], ["users.id"], name=op.f("news_author_id_fkey"), ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["category_id"], ["news_category.id"], name=op.f("news_category_id_fkey"), ondelete="CASCADE"
+        ),
         sa.PrimaryKeyConstraint("id", name=op.f("news_pkey")),
         sa.UniqueConstraint("title", name=op.f("news_title_key")),
     )
