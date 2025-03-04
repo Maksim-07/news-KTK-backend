@@ -1,0 +1,41 @@
+services:
+  news-ktk-app:
+    container_name: news-ktk-app
+    build:
+      context: ./src
+    working_dir: /usr/news-ktk/src
+    command: sh -c "
+      alembic upgrade head && python main.py
+      "
+    env_file: ./src/.env
+    networks:
+      - news-ktk-network
+    ports:
+      - "8000:8000"
+    depends_on:
+      - news-ktk-db
+
+  news-ktk-db:
+    image: postgres:16-alpine
+    container_name: news-ktk-db
+    restart: always
+    command: -p ${POSTGRES_PORT}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - news-ktk-network
+    expose:
+      - ${POSTGRES_PORT}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - news-ktk-db-data:/var/lib/postgresql/data/
+
+volumes:
+  news-ktk-db-data:
+
+networks:
+  news-ktk-network:
+    name: news-ktk-network-&{ENVIRONMENT}
