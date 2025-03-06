@@ -1,6 +1,7 @@
 services:
   news-ktk-app:
     container_name: news-ktk-app
+    restart: always
     build:
       context: ./src
     working_dir: /usr/news-ktk/src
