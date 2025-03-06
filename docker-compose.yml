@@ -15,7 +15,7 @@ services:
       - news-ktk-db
 
   news-ktk-db:
-    image: postgres:latest
+    image: postgres:16
     container_name: news-ktk-db
     restart: always
     command: -p ${POSTGRES_PORT}

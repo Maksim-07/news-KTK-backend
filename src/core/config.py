@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     CORS_ALLOW_ORIGIN_LIST: str = "http://127.0.0.1:8000"
 
-    USE_KEYCLOAK: bool = True
+    USE_KEYCLOAK: bool = False
 
     POSTGRES_HOST: str = "news-KTK"
     POSTGRES_PORT: int = 5632
@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     ALGORITHM: str
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 90
 
     @functools.cached_property
     def cors_allow_origins(self) -> list[str]:
