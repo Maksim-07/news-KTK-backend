@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "news-ktk"
 
-    SERVER_HOST: str = "localhost"
+    SERVER_HOST: str = "0.0.0.0"
     SERVER_PORT: int = 8000
 
     ENVIRONMENT: str = "local"
