@@ -1,5 +1,6 @@
 import jwt
 from fastapi import Depends, Request
+from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 
 from core.config import settings
@@ -10,6 +11,8 @@ from core.exceptions import (
     user_not_found_exceptions,
 )
 from services.user import UserService
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 async def verify_token(token: str | None, user_service: UserService) -> None:
@@ -32,10 +35,18 @@ async def verify_token(token: str | None, user_service: UserService) -> None:
         raise invalid_token_exceptions
 
 
-async def verify_token_from_header(request: Request, user_service: UserService = Depends()) -> None:
+# async def verify_token_from_header(request: Request, user_service: UserService = Depends()) -> None:
+#     if not settings().USE_KEYCLOAK:
+#         return
+#
+#     token = request.headers.get("Authorization")
+#
+#     await verify_token(token=token, user_service=user_service)
+
+
+async def verify_token_from_header(token: str = Depends(oauth2_scheme), user_service: UserService = Depends()) -> None:
     if not settings().USE_KEYCLOAK:
         return
-
-    token = request.headers.get("Authorization")
+    print(token)
 
     await verify_token(token=token, user_service=user_service)

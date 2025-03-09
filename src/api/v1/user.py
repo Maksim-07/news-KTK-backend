@@ -2,6 +2,7 @@ from typing import Sequence
 
 from fastapi import APIRouter, Depends, status
 
+from core.auth import oauth2_scheme
 from schemas.user import CurrentUserSchema, GetUserSchema, UpdateUserSchema
 from services.user import UserService
 
@@ -14,7 +15,9 @@ async def get_users(user_service: UserService = Depends()) -> Sequence[GetUserSc
 
 
 @router.get("/me", status_code=status.HTTP_200_OK, response_model=CurrentUserSchema)
-async def get_current_user(token: str, user_service: UserService = Depends()) -> CurrentUserSchema:
+async def get_current_user(
+    token: str = Depends(oauth2_scheme), user_service: UserService = Depends()
+) -> CurrentUserSchema:
     return await user_service.get_current_user(token=token)
 
 
