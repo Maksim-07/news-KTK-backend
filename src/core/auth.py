@@ -35,18 +35,7 @@ async def verify_token(token: str | None, user_service: UserService) -> None:
         raise invalid_token_exceptions
 
 
-# async def verify_token_from_header(request: Request, user_service: UserService = Depends()) -> None:
-#     if not settings().USE_KEYCLOAK:
-#         return
-#
-#     token = request.headers.get("Authorization")
-#
-#     await verify_token(token=token, user_service=user_service)
-
-
 async def verify_token_from_header(token: str = Depends(oauth2_scheme), user_service: UserService = Depends()) -> None:
     if not settings().USE_KEYCLOAK:
         return
-    print(token)
-
     await verify_token(token=token, user_service=user_service)
