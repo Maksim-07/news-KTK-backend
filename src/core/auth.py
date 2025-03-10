@@ -12,7 +12,7 @@ from core.exceptions import (
 )
 from services.user import UserService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/login")
 
 
 async def verify_token(token: str | None, user_service: UserService) -> None:
