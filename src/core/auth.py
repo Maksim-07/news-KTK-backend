@@ -36,6 +36,4 @@ async def verify_token(token: str | None, user_service: UserService) -> None:
 
 
 async def verify_token_from_header(token: str = Depends(oauth2_scheme), user_service: UserService = Depends()) -> None:
-    if not settings().USE_KEYCLOAK:
-        return
     await verify_token(token=token, user_service=user_service)
