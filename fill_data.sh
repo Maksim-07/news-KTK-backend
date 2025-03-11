@@ -4,7 +4,7 @@ ACCESS_TOKEN=$(curl -s -X 'POST' \
   "$API_URL/api/news-ktk/v1/auth/login" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'grant_type=password&username=admin&password=adminpassword&scope=&client_id=string&client_secret=string' \
+  -d 'grant_type=password&username=adminka&password=adminka&scope=&client_id=string&client_secret=string' \
   | jq -r '.access_token')
 
 curl -X 'POST' \
@@ -13,8 +13,8 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -d '{
-  "name": "Спорт",
-  "description": "Спортивные мероприятия в колледже"
+  "name": "%D0%A1%D0%BF%D0%BE%D1%80%D1%82",
+  "description": "%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B5%20%D0%BC%D0%B5%D1%80%D0%BE%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D1%8F%20%D0%B2%20%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%B4%D0%B6%D0%B5"
 }'
 
 curl -X 'POST' \
@@ -23,8 +23,8 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -d '{
-  "name": "Наука и технологии",
-  "description": "Новости о научных исследованиях"
+  "name": "%D0%9D%D0%B0%D1%83%D0%BA%D0%B0%20%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B8",
+  "description": "%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D0%BE%20%D0%BD%D0%B0%D1%83%D1%87%D0%BD%D1%8B%D1%85%20%D0%B8%D1%81%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%D1%85"
 }'
 
 curl -X 'POST' \
@@ -33,8 +33,8 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -d '{
-  "name": "Студенческая жизнь",
-  "description": "Новости о студенческих мероприятиях"
+  "name": "%D0%A1%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B6%D0%B8%D0%B7%D0%BD%D1%8C",
+  "description": "%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D0%BE%20%D1%81%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D1%85%20%D0%BC%D0%B5%D1%80%D0%BE%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D1%8F%D1%85"
 }'
 
 curl -X 'POST' \
@@ -45,8 +45,8 @@ curl -X 'POST' \
   -d '{
   "username": "admin",
   "email": "admin@mail.ru",
-  "first_name": "Имя",
-  "last_name": "Фамилия",
+  "first_name": "%D0%98%D0%BC%D1%8F",
+  "last_name": "%D0%A4%D0%B0%D0%BC%D0%B8%D0%BB%D0%B8%D1%8F",
   "password": "adminpassword"
 }'
 
