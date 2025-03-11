@@ -23,7 +23,7 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -d '{
-  "name": "Наука и технологии",
+  "name": "Science and technology",
   "description": "News about scientific research"
 }'
 
