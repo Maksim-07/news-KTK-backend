@@ -35,3 +35,7 @@ token_not_found_exceptions = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail="Token not found",
 )
+
+refresh_token_missing_exceptions = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token is missing"
+)
