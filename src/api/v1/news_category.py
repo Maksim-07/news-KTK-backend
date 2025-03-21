@@ -19,6 +19,13 @@ async def get_news_categories(
     return await news_category_service.get_news_categories()
 
 
+@router.get("/{category_id}", status_code=status.HTTP_200_OK, response_model=GetNewsCategorySchema)
+async def get_news_category_by_id(
+    category_id: int, news_category_service: NewsCategoryService = Depends()
+) -> GetNewsCategorySchema:
+    return await news_category_service.get_news_category_by_id(category_id=category_id)
+
+
 @router.post("", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_token_from_header)])
 async def create_news_category(
     news_category: UpdateNewsCategorySchema, news_category_service: NewsCategoryService = Depends()

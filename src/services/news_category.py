@@ -22,6 +22,14 @@ class NewsCategoryService:
 
         return [GetNewsCategorySchema.model_validate(category) for category in categories]
 
+    async def get_news_category_by_id(self, category_id: int) -> GetNewsCategorySchema:
+        news_category = await self._news_category_repo.get_category_by_id(category_id=category_id)
+
+        if news_category is None:
+            raise news_category_not_found_exceptions
+
+        return GetNewsCategorySchema.model_validate(news_category)
+
     async def create_news_category(self, news_category: UpdateNewsCategorySchema) -> None:
         current_news_category = await self._news_category_repo.get_category_by_name(category_name=news_category.name)
 
