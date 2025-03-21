@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from fastapi import APIRouter, Depends, File, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
 from core.auth import verify_token_from_header
 from schemas.news import GetNewsSchema, UpdateNewsSchema
@@ -21,9 +21,16 @@ async def get_news_by_id(news_id: int, news_service: NewsService = Depends()) ->
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_token_from_header)])
 async def create_news(
-    news: UpdateNewsSchema = Depends(), image: UploadFile = File(None), news_service: NewsService = Depends()
+    title: str = Form(...),
+    content: str = Form(...),
+    author_id: int = Form(...),
+    category_id: int = Form(...),
+    image: UploadFile = File(None),
+    news_service: NewsService = Depends(),
 ) -> None:
-    return await news_service.create_news(news=news, image=image)
+    news_data = UpdateNewsSchema(title=title, content=content, category_id=category_id, author_id=author_id)
+
+    return await news_service.create_news(news=news_data, image=image)
 
 
 @router.put(
@@ -31,11 +38,16 @@ async def create_news(
 )
 async def update_news(
     news_id: int,
-    news: UpdateNewsSchema = Depends(),
+    title: str = Form(...),
+    content: str = Form(...),
+    author_id: int = Form(...),
+    category_id: int = Form(...),
     image: UploadFile = File(None),
     news_service: NewsService = Depends(),
 ) -> None:
-    return await news_service.update_news(news_id=news_id, news=news, image=image)
+    news_data = UpdateNewsSchema(title=title, content=content, category_id=category_id, author_id=author_id)
+
+    return await news_service.update_news(news_id=news_id, news=news_data, image=image)
 
 
 @router.delete(
