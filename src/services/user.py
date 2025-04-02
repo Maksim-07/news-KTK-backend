@@ -80,10 +80,11 @@ class UserService:
         if self.__ctx.verify(user.old_password, current_user.password):
             user.new_password = self.__get_password_hash(user.new_password)
 
-            if not current_user.username == user.username or not current_user.email == user.email:
+            if not current_user.username == user.username:
                 if await self._user_repo.get_user_by_username(username=user.username):
                     raise username_already_exists_exceptions
 
+            if not current_user.email == user.email:
                 if await self._user_repo.get_user_by_email(email=user.email):
                     raise email_already_exists_exceptions
 
