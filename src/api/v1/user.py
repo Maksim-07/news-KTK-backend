@@ -3,7 +3,12 @@ from typing import Sequence
 from fastapi import APIRouter, Depends, status
 
 from core.auth import oauth2_scheme
-from schemas.user import CurrentUserSchema, GetUserSchema, UpdateUserSchema
+from schemas.user import (
+    CreateUserSchema,
+    CurrentUserSchema,
+    GetUserSchema,
+    UpdateUserSchema,
+)
 from services.user import UserService
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -22,8 +27,13 @@ async def get_current_user(
 
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=None)
-async def create_user(user: UpdateUserSchema, user_service: UserService = Depends()) -> None:
+async def create_user(user: CreateUserSchema, user_service: UserService = Depends()) -> None:
     return await user_service.create_user(user=user)
+
+
+@router.put("", status_code=status.HTTP_200_OK, response_model=None)
+async def update_user(user: UpdateUserSchema, user_service: UserService = Depends()) -> None:
+    return await user_service.update_user(user=user)
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=None)

@@ -12,6 +12,12 @@ user_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
 
 user_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
+username_already_exists_exceptions = HTTPException(
+    status_code=status.HTTP_409_CONFLICT, detail="Username already exists"
+)
+
+email_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already exists")
+
 news_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="News not found")
 
 news_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="News already exists")
