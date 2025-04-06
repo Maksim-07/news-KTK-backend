@@ -4,7 +4,7 @@ from sqlalchemy import delete, insert, select, update
 
 from db.models import User
 from db.repository.base import BaseDatabaseRepository
-from schemas.user import CreateUserSchema, UpdateUserSchema
+from schemas.user import CreateUserSchema, UpdateUserDataSchema
 
 
 class UserRepository(BaseDatabaseRepository):
@@ -37,20 +37,24 @@ class UserRepository(BaseDatabaseRepository):
         await self._session.execute(query)
         await self._session.commit()
 
-    async def update_user(self, user: UpdateUserSchema) -> None:
+    async def update_user_data(self, user_id: int, data: UpdateUserDataSchema) -> None:
         query = (
             update(User)
-            .where(User.id == user.id)
+            .where(User.id == user_id)
             .values(
                 {
-                    User.username: user.username,
-                    User.email: user.email,
-                    User.last_name: user.last_name,
-                    User.first_name: user.first_name,
-                    User.password: user.new_password,
+                    User.username: data.username,
+                    User.email: data.email,
+                    User.last_name: data.last_name,
+                    User.first_name: data.first_name,
                 }
             )
         )
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def update_user_password(self, user_id: int, new_password: str) -> None:
+        query = update(User).where(User.id == user_id).values({User.password: new_password})
         await self._session.execute(query)
         await self._session.commit()
 
