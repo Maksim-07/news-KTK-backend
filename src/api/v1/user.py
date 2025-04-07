@@ -7,7 +7,8 @@ from schemas.user import (
     CreateUserSchema,
     CurrentUserSchema,
     GetUserSchema,
-    UpdateUserSchema,
+    UpdateUserDataSchema,
+    UpdateUserPasswordSchema,
 )
 from services.user import UserService
 
@@ -31,9 +32,16 @@ async def create_user(user: CreateUserSchema, user_service: UserService = Depend
     return await user_service.create_user(user=user)
 
 
-@router.put("", status_code=status.HTTP_200_OK, response_model=None)
-async def update_user(user: UpdateUserSchema, user_service: UserService = Depends()) -> None:
-    return await user_service.update_user(user=user)
+@router.put("/{user_id}", status_code=status.HTTP_200_OK, response_model=None)
+async def update_user_data(user_id: int, data: UpdateUserDataSchema, user_service: UserService = Depends()) -> None:
+    return await user_service.update_user_data(user_id=user_id, data=data)
+
+
+@router.patch("/{user_id}/password", status_code=status.HTTP_200_OK, response_model=None)
+async def update_user_password(
+    user_id: int, data: UpdateUserPasswordSchema, user_service: UserService = Depends()
+) -> None:
+    return await user_service.update_user_password(user_id=user_id, data=data)
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=None)

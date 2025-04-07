@@ -16,8 +16,10 @@ class GetUserSchema(UserSchema):
     id: int
 
 
-class UpdateUserSchema(UserSchema):
-    id: int
+class UpdateUserDataSchema(UserSchema): ...
+
+
+class UpdateUserPasswordSchema(BaseSchema):
     old_password: str
     new_password: str
 

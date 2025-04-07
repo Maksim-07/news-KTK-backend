@@ -20,7 +20,8 @@ from schemas.user import (
     CreateUserSchema,
     CurrentUserSchema,
     GetUserSchema,
-    UpdateUserSchema,
+    UpdateUserDataSchema,
+    UpdateUserPasswordSchema,
 )
 
 
@@ -71,24 +72,32 @@ class UserService:
 
         return await self._user_repo.create_user(user=user)
 
-    async def update_user(self, user: UpdateUserSchema) -> None:
-        current_user = await self._user_repo.get_user_by_id(user_id=user.id)
+    async def update_user_data(self, user_id: int, data: UpdateUserDataSchema) -> None:
+        current_user = await self._user_repo.get_user_by_id(user_id=user_id)
 
         if not current_user:
             raise user_not_found_exceptions
 
-        if self.__ctx.verify(user.old_password, current_user.password):
-            user.new_password = self.__get_password_hash(user.new_password)
+        if not current_user.username == data.username:
+            if await self._user_repo.get_user_by_username(username=data.username):
+                raise username_already_exists_exceptions
 
-            if not current_user.username == user.username:
-                if await self._user_repo.get_user_by_username(username=user.username):
-                    raise username_already_exists_exceptions
+        if not current_user.email == data.email:
+            if await self._user_repo.get_user_by_email(email=data.email):
+                raise email_already_exists_exceptions
 
-            if not current_user.email == user.email:
-                if await self._user_repo.get_user_by_email(email=user.email):
-                    raise email_already_exists_exceptions
+        return await self._user_repo.update_user_data(user_id=user_id, data=data)
 
-            return await self._user_repo.update_user(user=user)
+    async def update_user_password(self, user_id: int, data: UpdateUserPasswordSchema) -> None:
+        current_user = await self._user_repo.get_user_by_id(user_id=user_id)
+
+        if not current_user:
+            raise user_not_found_exceptions
+
+        if self.__ctx.verify(data.old_password, current_user.password):
+            new_password = self.__get_password_hash(data.new_password)
+
+            return await self._user_repo.update_user_password(user_id=user_id, new_password=new_password)
 
         raise incorrect_password_exceptions
 
