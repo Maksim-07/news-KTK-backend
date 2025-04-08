@@ -1,6 +1,6 @@
 from typing import Any, Sequence
 
-from sqlalchemy import delete, insert, select, true, update
+from sqlalchemy import delete, desc, insert, select, true, update
 
 from db.models import News, User
 from db.repository.base import BaseDatabaseRepository
@@ -23,6 +23,7 @@ class NewsRepository(BaseDatabaseRepository):
             .select_from(News)
             .join(User, News.author_id == User.id)
             .filter(News.category_id == category_id if category_id else true())
+            .order_by(desc(News.created_at))
         )
         result = await self._session.execute(query)
 
