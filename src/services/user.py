@@ -15,6 +15,7 @@ from core.exceptions import (
     user_not_found_exceptions,
     username_already_exists_exceptions,
 )
+from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
 from schemas.user import (
     CreateUserSchema,
@@ -28,8 +29,9 @@ from schemas.user import (
 class UserService:
     __ctx = CryptContext(schemes=["bcrypt"])
 
-    def __init__(self, user_repo: UserRepository = Depends()):
+    def __init__(self, user_repo: UserRepository = Depends(), role_repo: RoleRepository = Depends()):
         self._user_repo = user_repo
+        self._role_repo = role_repo
 
     async def get_users(self) -> Sequence[GetUserSchema]:
         users = await self._user_repo.get_users()
@@ -57,7 +59,16 @@ class UserService:
             if not user:
                 raise user_not_found_exceptions
 
-            return CurrentUserSchema.model_validate(user)
+            role = await self._role_repo.get_role_by_id(role_id=user.role_id)
+
+            return CurrentUserSchema(
+                id=user.id,
+                username=user.username,
+                email=user.email,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                role=role.name,
+            )
 
         except InvalidTokenError:
             raise invalid_token_exceptions
