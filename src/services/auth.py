@@ -14,6 +14,7 @@ from core.exceptions import (
     refresh_token_missing_exceptions,
     user_not_found_exceptions,
 )
+from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
 from schemas.token import TokenDataSchema, TokenSchema
 from schemas.user import CurrentUserSchema
@@ -22,8 +23,9 @@ from schemas.user import CurrentUserSchema
 class AuthService:
     __ctx = CryptContext(schemes=["bcrypt"])
 
-    def __init__(self, user_repo: UserRepository = Depends()):
+    def __init__(self, user_repo: UserRepository = Depends(), role_repo: RoleRepository = Depends()):
         self._user_repo = user_repo
+        self._role_repo = role_repo
 
     async def login_user(self, response: Response, user: OAuth2PasswordRequestForm):
         current_user = await self._user_repo.get_user_by_username(username=user.username)
@@ -32,8 +34,18 @@ class AuthService:
             raise user_not_found_exceptions
 
         if self.__verify_password(password=user.password, hash_password=current_user.password):
-            access_token = self.__create_access_token(data=CurrentUserSchema.model_validate(current_user))
-            refresh_token = self.__create_refresh_token(data=CurrentUserSchema.model_validate(current_user))
+            role = await self._role_repo.get_role_by_id(role_id=current_user.role_id)
+
+            current_user_schema = CurrentUserSchema(
+                id=current_user.id,
+                username=current_user.username,
+                email=current_user.email,
+                first_name=current_user.first_name,
+                last_name=current_user.last_name,
+                role=role.name,
+            )
+            access_token = self.__create_access_token(data=current_user_schema)
+            refresh_token = self.__create_refresh_token(data=current_user_schema)
 
             response.set_cookie(
                 key="refresh_token",
@@ -65,8 +77,19 @@ class AuthService:
             if not current_user:
                 raise user_not_found_exceptions
 
-            access_token = self.__create_access_token(data=CurrentUserSchema.model_validate(current_user))
-            refresh_token = self.__create_refresh_token(data=CurrentUserSchema.model_validate(current_user))
+            role = await self._role_repo.get_role_by_id(role_id=current_user.role_id)
+
+            current_user_schema = CurrentUserSchema(
+                id=current_user.id,
+                username=current_user.username,
+                email=current_user.email,
+                first_name=current_user.first_name,
+                last_name=current_user.last_name,
+                role=role.name,
+            )
+
+            access_token = self.__create_access_token(data=current_user_schema)
+            refresh_token = self.__create_refresh_token(data=current_user_schema)
 
             response.set_cookie(
                 key="refresh_token",
