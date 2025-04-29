@@ -10,7 +10,7 @@ class UserSchema(BaseSchema):
 
 class CurrentUserSchema(UserSchema):
     id: int
-    role: str
+    role_id: int
 
 
 class GetUserSchema(UserSchema):

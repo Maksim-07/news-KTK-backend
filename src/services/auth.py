@@ -34,16 +34,8 @@ class AuthService:
             raise user_not_found_exceptions
 
         if self.__verify_password(password=user.password, hash_password=current_user.password):
-            role = await self._role_repo.get_role_by_id(role_id=current_user.role_id)
+            current_user_schema = CurrentUserSchema.model_validate(current_user)
 
-            current_user_schema = CurrentUserSchema(
-                id=current_user.id,
-                username=current_user.username,
-                email=current_user.email,
-                first_name=current_user.first_name,
-                last_name=current_user.last_name,
-                role=role.name,
-            )
             access_token = self.__create_access_token(data=current_user_schema)
             refresh_token = self.__create_refresh_token(data=current_user_schema)
 
@@ -77,16 +69,7 @@ class AuthService:
             if not current_user:
                 raise user_not_found_exceptions
 
-            role = await self._role_repo.get_role_by_id(role_id=current_user.role_id)
-
-            current_user_schema = CurrentUserSchema(
-                id=current_user.id,
-                username=current_user.username,
-                email=current_user.email,
-                first_name=current_user.first_name,
-                last_name=current_user.last_name,
-                role=role.name,
-            )
+            current_user_schema = CurrentUserSchema.model_validate(current_user)
 
             access_token = self.__create_access_token(data=current_user_schema)
             refresh_token = self.__create_refresh_token(data=current_user_schema)

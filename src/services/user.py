@@ -59,16 +59,7 @@ class UserService:
             if not user:
                 raise user_not_found_exceptions
 
-            role = await self._role_repo.get_role_by_id(role_id=user.role_id)
-
-            return CurrentUserSchema(
-                id=user.id,
-                username=user.username,
-                email=user.email,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                role=role.name,
-            )
+            return CurrentUserSchema.model_validate(user)
 
         except InvalidTokenError:
             raise invalid_token_exceptions
