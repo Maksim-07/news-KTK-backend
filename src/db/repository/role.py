@@ -14,11 +14,11 @@ class RoleRepository(BaseDatabaseRepository):
 
         return result.scalars().all()
 
-    async def get_role_by_id(self, role_id: int) -> Role:
+    async def get_role_by_id(self, role_id: int) -> Role | None:
         query = select(Role).where(Role.id == role_id)
         result = await self._session.execute(query)
 
-        return result.scalar_one()
+        return result.scalar_one_or_none()
 
     async def get_role_by_name(self, name: str) -> Role | None:
         query = select(Role).where(Role.name == name)
