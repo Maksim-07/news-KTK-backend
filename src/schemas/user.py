@@ -15,6 +15,7 @@ class CurrentUserSchema(UserSchema):
 
 class GetUserSchema(UserSchema):
     id: int
+    role_id: int
 
 
 class UpdateUserDataSchema(UserSchema): ...
@@ -23,6 +24,10 @@ class UpdateUserDataSchema(UserSchema): ...
 class UpdateUserPasswordSchema(BaseSchema):
     old_password: str
     new_password: str
+
+
+class UpdateUserRoleSchema(BaseSchema):
+    role_id: int
 
 
 class CreateUserSchema(UserSchema):

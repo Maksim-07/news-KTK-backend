@@ -23,6 +23,7 @@ from schemas.user import (
     GetUserSchema,
     UpdateUserDataSchema,
     UpdateUserPasswordSchema,
+    UpdateUserRoleSchema,
 )
 
 
@@ -102,6 +103,14 @@ class UserService:
             return await self._user_repo.update_user_password(user_id=user_id, new_password=new_password)
 
         raise incorrect_password_exceptions
+
+    async def update_user_role(self, user_id: int, data: UpdateUserRoleSchema) -> None:
+        current_user = await self._user_repo.get_user_by_id(user_id=user_id)
+
+        if not current_user:
+            raise user_not_found_exceptions
+
+        return await self._user_repo.update_user_role(user_id=user_id, role_id=data.role_id)
 
     async def delete_user_by_id(self, user_id: int) -> None:
         current_user = await self._user_repo.get_user_by_id(user_id=user_id)
