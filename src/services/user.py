@@ -15,6 +15,7 @@ from core.exceptions import (
     user_not_found_exceptions,
     username_already_exists_exceptions,
 )
+from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
 from schemas.user import (
     CreateUserSchema,
@@ -22,14 +23,16 @@ from schemas.user import (
     GetUserSchema,
     UpdateUserDataSchema,
     UpdateUserPasswordSchema,
+    UpdateUserRoleSchema,
 )
 
 
 class UserService:
     __ctx = CryptContext(schemes=["bcrypt"])
 
-    def __init__(self, user_repo: UserRepository = Depends()):
+    def __init__(self, user_repo: UserRepository = Depends(), role_repo: RoleRepository = Depends()):
         self._user_repo = user_repo
+        self._role_repo = role_repo
 
     async def get_users(self) -> Sequence[GetUserSchema]:
         users = await self._user_repo.get_users()
@@ -100,6 +103,14 @@ class UserService:
             return await self._user_repo.update_user_password(user_id=user_id, new_password=new_password)
 
         raise incorrect_password_exceptions
+
+    async def update_user_role(self, user_id: int, data: UpdateUserRoleSchema) -> None:
+        current_user = await self._user_repo.get_user_by_id(user_id=user_id)
+
+        if not current_user:
+            raise user_not_found_exceptions
+
+        return await self._user_repo.update_user_role(user_id=user_id, role_id=data.role_id)
 
     async def delete_user_by_id(self, user_id: int) -> None:
         current_user = await self._user_repo.get_user_by_id(user_id=user_id)

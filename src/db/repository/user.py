@@ -34,6 +34,7 @@ class UserRepository(BaseDatabaseRepository):
 
     async def create_user(self, user: CreateUserSchema) -> None:
         query = insert(User).values(**user.model_dump())
+
         await self._session.execute(query)
         await self._session.commit()
 
@@ -50,15 +51,24 @@ class UserRepository(BaseDatabaseRepository):
                 }
             )
         )
+
         await self._session.execute(query)
         await self._session.commit()
 
     async def update_user_password(self, user_id: int, new_password: str) -> None:
         query = update(User).where(User.id == user_id).values({User.password: new_password})
+
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def update_user_role(self, user_id: int, role_id: int) -> None:
+        query = update(User).where(User.id == user_id).values({User.role_id: role_id})
+
         await self._session.execute(query)
         await self._session.commit()
 
     async def delete_user_by_id(self, user_id: int) -> None:
         query = delete(User).where(User.id == user_id)
+
         await self._session.execute(query)
         await self._session.commit()

@@ -22,6 +22,10 @@ news_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
 
 news_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="News already exists")
 
+role_already_exists_exceptions = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Role already exists")
+
+role_not_found_exceptions = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Role not found")
+
 incorrect_password_exceptions = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Invalid password",

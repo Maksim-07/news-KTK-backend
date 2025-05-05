@@ -9,6 +9,7 @@ from schemas.user import (
     GetUserSchema,
     UpdateUserDataSchema,
     UpdateUserPasswordSchema,
+    UpdateUserRoleSchema,
 )
 from services.user import UserService
 
@@ -42,6 +43,11 @@ async def update_user_password(
     user_id: int, data: UpdateUserPasswordSchema, user_service: UserService = Depends()
 ) -> None:
     return await user_service.update_user_password(user_id=user_id, data=data)
+
+
+@router.patch("/{user_id}/role", status_code=status.HTTP_200_OK, response_model=None)
+async def update_user_role(user_id: int, data: UpdateUserRoleSchema, user_service: UserService = Depends()) -> None:
+    return await user_service.update_user_role(user_id=user_id, data=data)
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=None)
