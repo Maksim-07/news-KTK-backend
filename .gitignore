@@ -245,3 +245,4 @@ poetry.toml
 .venv/
 
 .python-version
+/src/serviceAccountKey.json

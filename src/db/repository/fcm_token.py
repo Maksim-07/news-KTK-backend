@@ -1,0 +1,21 @@
+from typing import Sequence
+
+from sqlalchemy import insert, select
+
+from db.models import FCMToken
+from db.repository.base import BaseDatabaseRepository
+from schemas.fcm_token import FCMTokenSchema
+
+
+class FCMTokenRepository(BaseDatabaseRepository):
+    async def save_token(self, token: FCMTokenSchema) -> None:
+        query = insert(FCMToken).values(**token.model_dump())
+
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def get_tokens(self) -> Sequence[str]:
+        query = select(FCMToken.token)
+        result = await self._session.execute(query)
+
+        return result.scalars().all()
