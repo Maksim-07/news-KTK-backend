@@ -4,6 +4,7 @@ from fastapi import Depends
 
 from core.exceptions import (
     news_already_exists_exceptions,
+    news_category_not_found_exceptions,
     news_not_found_exceptions,
 )
 from db.repository.news import NewsRepository
@@ -37,6 +38,11 @@ class NewsService:
         return GetNewsSchema.model_validate(news)
 
     async def create_news(self, news: UpdateNewsSchema, image) -> None:
+        current_news_category = await self._news_category_repo.get_category_by_id(category_id=news.category_id)
+
+        if current_news_category is None:
+            raise news_category_not_found_exceptions
+
         current_news = await self._news_repo.get_news_by_title(title=news.title)
 
         if current_news:
