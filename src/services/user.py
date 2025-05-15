@@ -18,7 +18,7 @@ from core.exceptions import (
 from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
 from schemas.user import (
-    CreateUserSchema,
+    CreateAdminSchema,
     CurrentUserSchema,
     GetUserSchema,
     UpdateUserDataSchema,
@@ -65,15 +65,15 @@ class UserService:
         except InvalidTokenError:
             raise invalid_token_exceptions
 
-    async def create_user(self, user: CreateUserSchema) -> None:
-        current_user = await self._user_repo.get_user_by_username(username=user.username)
+    async def create_admin(self, admin: CreateAdminSchema) -> None:
+        current_user = await self._user_repo.get_user_by_username(username=admin.username)
 
         if current_user:
             raise user_already_exists_exceptions
 
-        user.password = self.__get_password_hash(user.password)
+        admin.password = await self.get_password_hash(admin.password)
 
-        return await self._user_repo.create_user(user=user)
+        return await self._user_repo.create_admin(admin=admin)
 
     async def update_user_data(self, user_id: int, data: UpdateUserDataSchema) -> None:
         current_user = await self._user_repo.get_user_by_id(user_id=user_id)
@@ -98,7 +98,7 @@ class UserService:
             raise user_not_found_exceptions
 
         if self.__ctx.verify(data.old_password, current_user.password):
-            new_password = self.__get_password_hash(data.new_password)
+            new_password = await self.get_password_hash(data.new_password)
 
             return await self._user_repo.update_user_password(user_id=user_id, new_password=new_password)
 
@@ -120,5 +120,5 @@ class UserService:
 
         return await self._user_repo.delete_user_by_id(user_id=user_id)
 
-    def __get_password_hash(self, password: str) -> str:
+    async def get_password_hash(self, password: str) -> str:
         return self.__ctx.hash(password)

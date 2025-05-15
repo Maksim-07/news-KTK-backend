@@ -1,10 +1,10 @@
-from typing import Sequence
+from typing import Sequence, Union
 
 from fastapi import APIRouter, Depends, status
 
-from core.auth import oauth2_scheme
+from core.auth import oauth2_admin_scheme, oauth2_user_scheme
 from schemas.user import (
-    CreateUserSchema,
+    CreateAdminSchema,
     CurrentUserSchema,
     GetUserSchema,
     UpdateUserDataSchema,
@@ -21,16 +21,23 @@ async def get_users(user_service: UserService = Depends()) -> Sequence[GetUserSc
     return await user_service.get_users()
 
 
-@router.get("/me", status_code=status.HTTP_200_OK, response_model=CurrentUserSchema)
+@router.get("/user/me", status_code=status.HTTP_200_OK, response_model=CurrentUserSchema)
 async def get_current_user(
-    token: str = Depends(oauth2_scheme), user_service: UserService = Depends()
+    user_token: str = Depends(oauth2_user_scheme), user_service: UserService = Depends()
 ) -> CurrentUserSchema:
-    return await user_service.get_current_user(token=token)
+    return await user_service.get_current_user(token=user_token)
+
+
+@router.get("/admin/me", status_code=status.HTTP_200_OK, response_model=CurrentUserSchema)
+async def get_current_admin(
+    admin_token: str = Depends(oauth2_admin_scheme), user_service: UserService = Depends()
+) -> CurrentUserSchema:
+    return await user_service.get_current_user(token=admin_token)
 
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=None)
-async def create_user(user: CreateUserSchema, user_service: UserService = Depends()) -> None:
-    return await user_service.create_user(user=user)
+async def create_admin(admin: CreateAdminSchema, user_service: UserService = Depends()) -> None:
+    return await user_service.create_admin(admin=admin)
 
 
 @router.put("/{user_id}", status_code=status.HTTP_200_OK, response_model=None)

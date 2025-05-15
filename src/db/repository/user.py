@@ -4,7 +4,11 @@ from sqlalchemy import delete, insert, select, update
 
 from db.models import User
 from db.repository.base import BaseDatabaseRepository
-from schemas.user import CreateUserSchema, UpdateUserDataSchema
+from schemas.user import (
+    CreateAdminSchema,
+    UpdateUserDataSchema,
+    UserRegisterFormSchema,
+)
 
 
 class UserRepository(BaseDatabaseRepository):
@@ -32,8 +36,14 @@ class UserRepository(BaseDatabaseRepository):
 
         return result.scalar_one_or_none()
 
-    async def create_user(self, user: CreateUserSchema) -> None:
-        query = insert(User).values(**user.model_dump())
+    async def create_admin(self, admin: CreateAdminSchema) -> None:
+        query = insert(User).values(**admin.model_dump())
+
+        await self._session.execute(query)
+        await self._session.commit()
+
+    async def create_user(self, user: UserRegisterFormSchema, role_id: int) -> None:
+        query = insert(User).values(**user.model_dump(), role_id=role_id)
 
         await self._session.execute(query)
         await self._session.commit()

@@ -1,3 +1,5 @@
+from pydantic import Field
+
 from schemas.base import BaseSchema
 
 
@@ -30,6 +32,10 @@ class UpdateUserRoleSchema(BaseSchema):
     role_id: int
 
 
-class CreateUserSchema(UserSchema):
+class CreateAdminSchema(UserSchema):
     password: str
     role_id: int
+
+
+class UserRegisterFormSchema(UserSchema):
+    password: str

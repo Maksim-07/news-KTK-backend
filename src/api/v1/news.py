@@ -2,7 +2,7 @@ from typing import Sequence
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
-from core.auth import verify_token_from_header
+from core.auth import verify_admin_token_from_header
 from schemas.news import GetNewsSchema, UpdateNewsSchema
 from services.news import NewsService
 
@@ -19,7 +19,9 @@ async def get_news_by_id(news_id: int, news_service: NewsService = Depends()) ->
     return await news_service.get_news_by_id(news_id=news_id)
 
 
-@router.post("", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_token_from_header)])
+@router.post(
+    "", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_admin_token_from_header)]
+)
 async def create_news(
     title: str = Form(...),
     content: str = Form(...),
@@ -34,7 +36,10 @@ async def create_news(
 
 
 @router.put(
-    "/{news_id}", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_token_from_header)]
+    "/{news_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=None,
+    dependencies=[Depends(verify_admin_token_from_header)],
 )
 async def update_news(
     news_id: int,
@@ -51,7 +56,10 @@ async def update_news(
 
 
 @router.delete(
-    "/{news_id}", status_code=status.HTTP_200_OK, response_model=None, dependencies=[Depends(verify_token_from_header)]
+    "/{news_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=None,
+    dependencies=[Depends(verify_admin_token_from_header)],
 )
 async def delete_news_by_id(news_id: int, news_service: NewsService = Depends()) -> None:
     return await news_service.delete_news_by_id(news_id=news_id)

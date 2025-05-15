@@ -12,7 +12,16 @@ from core.exceptions import (
 )
 from services.user import UserService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/login")
+# oauth2_scheme_admin = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/admin/login")
+# oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/user/login")
+
+oauth2_user_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/news-ktk/v1/auth/user/login", scheme_name="UserAuth", description="User token (JWT)"
+)
+
+oauth2_admin_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/news-ktk/v1/auth/admin/login", scheme_name="AdminAuth", description="Admin token (JWT)"
+)
 
 
 async def verify_token(token: str | None, user_service: UserService) -> None:
@@ -35,5 +44,13 @@ async def verify_token(token: str | None, user_service: UserService) -> None:
         raise invalid_token_exceptions
 
 
-async def verify_token_from_header(token: str = Depends(oauth2_scheme), user_service: UserService = Depends()) -> None:
+async def verify_admin_token_from_header(
+    token: str = Depends(oauth2_admin_scheme), user_service: UserService = Depends()
+) -> None:
+    await verify_token(token=token, user_service=user_service)
+
+
+async def verify_user_token_from_header(
+    token: str = Depends(oauth2_user_scheme), user_service: UserService = Depends()
+) -> None:
     await verify_token(token=token, user_service=user_service)
