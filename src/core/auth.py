@@ -12,9 +12,6 @@ from core.exceptions import (
 )
 from services.user import UserService
 
-# oauth2_scheme_admin = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/admin/login")
-# oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl="/api/news-ktk/v1/auth/user/login")
-
 oauth2_user_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/news-ktk/v1/auth/user/login", scheme_name="UserAuth", description="User token (JWT)"
 )

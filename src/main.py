@@ -20,20 +20,6 @@ app.add_middleware(
     allow_credentials=True,
 )
 
-# app.openapi_schema = {
-#     "components": {
-#         "securitySchemes": {
-#             "UserAuth": {
-#                 "type": "oauth2",
-#                 "flows": {"password": {"tokenUrl": "/api/auth/login"}}
-#             },
-#             "AdminAuth": {
-#                 "type": "oauth2",
-#                 "flows": {"password": {"tokenUrl": "/api/admin/auth/login"}}
-#             }
-#         }
-#     }
-# }
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings().SERVER_HOST, port=settings().SERVER_PORT)
