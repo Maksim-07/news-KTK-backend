@@ -12,4 +12,6 @@ class GetFeedbackSchema(FeedbackSchema):
     is_completed: bool
 
 
-class UpdateFeedbackSchema(FeedbackSchema): ...
+class UpdateFeedbackSchema(BaseSchema):
+    user_id: int
+    description: str
