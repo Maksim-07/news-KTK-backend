@@ -14,7 +14,7 @@ from core.exceptions import (
     refresh_token_missing_exceptions,
     role_not_found_exceptions,
     user_already_exists_exceptions,
-    user_not_found_exceptions,
+    user_not_found_exceptions, email_already_exists_exceptions,
 )
 from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
@@ -94,6 +94,11 @@ class AuthService:
 
         if current_user:
             raise user_already_exists_exceptions
+
+        current_email = await self._user_repo.get_user_by_email(email=user.email)
+
+        if current_email:
+            raise email_already_exists_exceptions
 
         user.password = await self._user_service.get_password_hash(user.password)
 
