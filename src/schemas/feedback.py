@@ -13,5 +13,4 @@ class GetFeedbackSchema(FeedbackSchema):
 
 
 class UpdateFeedbackSchema(BaseSchema):
-    user_id: int
     description: str

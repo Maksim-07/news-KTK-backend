@@ -33,5 +33,5 @@ class FeedbackService:
 
         return feedbacks_schemas
 
-    async def create_feedback(self, feedback: UpdateFeedbackSchema) -> None:
-        return await self._feedback_repo.create_feedback(feedback=feedback)
+    async def create_feedback(self, user_id: int, feedback: UpdateFeedbackSchema) -> None:
+        return await self._feedback_repo.create_feedback(user_id=user_id, feedback=feedback)

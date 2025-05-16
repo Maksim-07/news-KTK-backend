@@ -15,7 +15,7 @@ from core.config import settings
 
 v1_router = APIRouter(prefix="/v1")
 v1_router.include_router(news_category_router)
-v1_router.include_router(user_router, dependencies=[Depends(verify_admin_token_from_header)])
+v1_router.include_router(user_router)
 v1_router.include_router(news_router)
 v1_router.include_router(
     fcm_token_router, dependencies=[Depends(verify_user_token_from_header), Depends(verify_admin_token_from_header)]

@@ -12,6 +12,7 @@ from core.exceptions import (
     incorrect_password_exceptions,
     invalid_token_exceptions,
     refresh_token_missing_exceptions,
+    role_not_found_exceptions,
     user_already_exists_exceptions,
     user_not_found_exceptions,
 )
@@ -41,11 +42,11 @@ class AuthService:
         if not current_user:
             raise user_not_found_exceptions
 
-        if self.__verify_password(password=user.password, hash_password=current_user.password):
+        if await self.__verify_password(password=user.password, hash_password=current_user.password):
             current_user_schema = CurrentUserSchema.model_validate(current_user)
 
-            access_token = self.__create_access_token(data=current_user_schema)
-            refresh_token = self.__create_refresh_token(data=current_user_schema)
+            access_token = await self.__create_access_token(data=current_user_schema)
+            refresh_token = await self.__create_refresh_token(data=current_user_schema)
 
             response.set_cookie(
                 key="refresh_token",
@@ -70,11 +71,11 @@ class AuthService:
         if not current_role or not current_role.can_edit_news:
             raise user_not_found_exceptions
 
-        if self.__verify_password(password=user.password, hash_password=current_user.password):
+        if await self.__verify_password(password=user.password, hash_password=current_user.password):
             current_user_schema = CurrentUserSchema.model_validate(current_user)
 
-            access_token = self.__create_access_token(data=current_user_schema)
-            refresh_token = self.__create_refresh_token(data=current_user_schema)
+            access_token = await self.__create_access_token(data=current_user_schema)
+            refresh_token = await self.__create_refresh_token(data=current_user_schema)
 
             response.set_cookie(
                 key="refresh_token",
@@ -123,8 +124,8 @@ class AuthService:
 
             current_user_schema = CurrentUserSchema.model_validate(current_user)
 
-            access_token = self.__create_access_token(data=current_user_schema)
-            refresh_token = self.__create_refresh_token(data=current_user_schema)
+            access_token = await self.__create_access_token(data=current_user_schema)
+            refresh_token = await self.__create_refresh_token(data=current_user_schema)
 
             response.set_cookie(
                 key="refresh_token",
@@ -139,21 +140,29 @@ class AuthService:
         except InvalidTokenError:
             raise invalid_token_exceptions
 
-    def __verify_password(self, password: str, hash_password: str) -> bool:
+    async def __verify_password(self, password: str, hash_password: str) -> bool:
         return self.__ctx.verify(password, hash_password)
 
-    @staticmethod
-    def __create_access_token(data: CurrentUserSchema) -> str:
+    async def __create_access_token(self, data: CurrentUserSchema) -> str:
         expire = datetime.now(timezone.utc) + timedelta(minutes=settings().ACCESS_TOKEN_EXPIRE_MINUTES)
-        to_encode = TokenDataSchema(user_id=data.id, sub=data.username, exp=expire)
+
+        role = await self._role_repo.get_role_by_id(role_id=data.role_id)
+        if not role:
+            raise role_not_found_exceptions
+
+        to_encode = TokenDataSchema(user_id=data.id, sub=data.username, role=role.name, exp=expire)
         encoded_jwt = jwt.encode(to_encode.model_dump(), key=settings().SECRET_KEY, algorithm=settings().ALGORITHM)
 
         return encoded_jwt
 
-    @staticmethod
-    def __create_refresh_token(data: CurrentUserSchema) -> str:
+    async def __create_refresh_token(self, data: CurrentUserSchema) -> str:
         expire = datetime.now(timezone.utc) + timedelta(seconds=settings().REFRESH_TOKEN_EXPIRE_DAYS)
-        to_encode = TokenDataSchema(user_id=data.id, sub=data.username, exp=expire)
+
+        role = await self._role_repo.get_role_by_id(role_id=data.role_id)
+        if not role:
+            raise role_not_found_exceptions
+
+        to_encode = TokenDataSchema(user_id=data.id, sub=data.username, role=role.name, exp=expire)
         encoded_jwt = jwt.encode(to_encode.model_dump(), key=settings().SECRET_KEY, algorithm=settings().ALGORITHM)
 
         return encoded_jwt

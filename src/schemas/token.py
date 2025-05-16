@@ -11,4 +11,5 @@ class TokenSchema(BaseModel):
 class TokenDataSchema(BaseModel):
     user_id: int
     sub: str
+    role: str
     exp: datetime

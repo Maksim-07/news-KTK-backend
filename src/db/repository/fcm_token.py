@@ -8,8 +8,8 @@ from schemas.fcm_token import FCMTokenSchema
 
 
 class FCMTokenRepository(BaseDatabaseRepository):
-    async def save_token(self, token: FCMTokenSchema) -> None:
-        query = insert(FCMToken).values(**token.model_dump())
+    async def save_token(self, user_id: int, token: FCMTokenSchema) -> None:
+        query = insert(FCMToken).values(**token.model_dump(), user_id=user_id)
 
         await self._session.execute(query)
         await self._session.commit()

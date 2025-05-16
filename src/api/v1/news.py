@@ -2,7 +2,10 @@ from typing import Sequence
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
-from core.auth import verify_admin_token_from_header
+from core.auth import (
+    get_user_id_from_admin_token,
+    verify_admin_token_from_header,
+)
 from schemas.news import GetNewsSchema, UpdateNewsSchema
 from services.news import NewsService
 
@@ -25,7 +28,7 @@ async def get_news_by_id(news_id: int, news_service: NewsService = Depends()) ->
 async def create_news(
     title: str = Form(...),
     content: str = Form(...),
-    author_id: int = Form(...),
+    author_id: int = Depends(get_user_id_from_admin_token),
     category_id: int = Form(...),
     image: UploadFile = File(None),
     news_service: NewsService = Depends(),
@@ -45,7 +48,7 @@ async def update_news(
     news_id: int,
     title: str = Form(...),
     content: str = Form(...),
-    author_id: int = Form(...),
+    author_id: int = Depends(get_user_id_from_admin_token),
     category_id: int = Form(...),
     image: UploadFile = File(None),
     news_service: NewsService = Depends(),

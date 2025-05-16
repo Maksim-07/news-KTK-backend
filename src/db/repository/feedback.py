@@ -14,8 +14,8 @@ class FeedbackRepository(BaseDatabaseRepository):
 
         return result.scalars().all()
 
-    async def create_feedback(self, feedback: UpdateFeedbackSchema) -> None:
-        query = insert(Feedback).values(**feedback.model_dump())
+    async def create_feedback(self, user_id: int, feedback: UpdateFeedbackSchema) -> None:
+        query = insert(Feedback).values({Feedback.user_id: user_id, Feedback.description: feedback.description})
 
         await self._session.execute(query)
         await self._session.commit()
