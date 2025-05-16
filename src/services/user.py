@@ -71,6 +71,11 @@ class UserService:
         if current_user:
             raise user_already_exists_exceptions
 
+        current_email = await self._user_repo.get_user_by_email(email=admin.email)
+
+        if current_email:
+            raise email_already_exists_exceptions
+
         admin.password = await self.get_password_hash(admin.password)
 
         return await self._user_repo.create_admin(admin=admin)
