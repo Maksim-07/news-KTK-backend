@@ -19,3 +19,9 @@ class FCMTokenRepository(BaseDatabaseRepository):
         result = await self._session.execute(query)
 
         return result.scalars().all()
+
+    async def get_tokens_with_all_info(self) -> Sequence[FCMToken]:
+        query = select(FCMToken)
+        result = await self._session.execute(query)
+
+        return result.scalars().all()
