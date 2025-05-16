@@ -49,3 +49,5 @@ token_not_found_exceptions = HTTPException(
 refresh_token_missing_exceptions = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token is missing"
 )
+
+access_denied_exceptions = HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough rights")
