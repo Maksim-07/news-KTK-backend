@@ -34,8 +34,8 @@ class UserService:
         self._user_repo = user_repo
         self._role_repo = role_repo
 
-    async def get_users(self) -> Sequence[GetUserSchema]:
-        users = await self._user_repo.get_users()
+    async def get_users(self, role_id: int | None) -> Sequence[GetUserSchema]:
+        users = await self._user_repo.get_users(role_id=role_id)
 
         return [GetUserSchema.model_validate(user) for user in users]
 
