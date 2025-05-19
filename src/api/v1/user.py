@@ -29,8 +29,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
     response_model=Sequence[GetUserSchema],
     dependencies=[Depends(verify_superadmin_token_from_header)],
 )
-async def get_users(user_service: UserService = Depends()) -> Sequence[GetUserSchema]:
-    return await user_service.get_users()
+async def get_users(role_id: int | None = None, user_service: UserService = Depends()) -> Sequence[GetUserSchema]:
+    return await user_service.get_users(role_id=role_id)
 
 
 @router.get(

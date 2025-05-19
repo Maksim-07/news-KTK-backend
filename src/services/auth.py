@@ -9,12 +9,13 @@ from passlib.context import CryptContext
 from core.config import settings
 from core.exceptions import (
     credentials_exceptions,
+    email_already_exists_exceptions,
     incorrect_password_exceptions,
     invalid_token_exceptions,
     refresh_token_missing_exceptions,
     role_not_found_exceptions,
     user_already_exists_exceptions,
-    user_not_found_exceptions, email_already_exists_exceptions,
+    user_not_found_exceptions,
 )
 from db.repository.role import RoleRepository
 from db.repository.user import UserRepository
