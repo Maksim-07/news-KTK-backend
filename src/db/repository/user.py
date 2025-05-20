@@ -12,8 +12,8 @@ from schemas.user import (
 
 
 class UserRepository(BaseDatabaseRepository):
-    async def get_users(self, role_id: int | None) -> Sequence[User]:
-        query = select(User).filter(User.role_id == role_id if role_id else true())
+    async def get_users(self, role_id: list[int] | None) -> Sequence[User]:
+        query = select(User).filter(User.role_id.in_(role_id) if role_id else true())
         result = await self._session.execute(query)
 
         return result.scalars().all()
