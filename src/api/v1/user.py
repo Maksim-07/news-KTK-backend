@@ -1,12 +1,11 @@
-from typing import Sequence, Union
+from typing import Sequence
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 
 from core.auth import (
     oauth2_admin_scheme,
     oauth2_user_scheme,
     verify_admin_token_from_header,
-    verify_superadmin_token,
     verify_superadmin_token_from_header,
     verify_user_token_from_header,
 )
@@ -29,7 +28,9 @@ router = APIRouter(prefix="/users", tags=["Users"])
     response_model=Sequence[GetUserSchema],
     dependencies=[Depends(verify_superadmin_token_from_header)],
 )
-async def get_users(role_id: int | None = None, user_service: UserService = Depends()) -> Sequence[GetUserSchema]:
+async def get_users(
+    role_id: list[int] | None = Query(None), user_service: UserService = Depends()
+) -> Sequence[GetUserSchema]:
     return await user_service.get_users(role_id=role_id)
 
 
